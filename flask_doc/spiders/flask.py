@@ -8,10 +8,12 @@ from flask_doc.items import PageItem
 class FlaskSpider(CrawlSpider):
     name = 'flask'
     allowed_domains = ['flask.pocoo.org']
-    start_urls = ['http://flask.pocoo.org/']
+    start_urls = ['http://flask.pocoo.org/docs/0.12/']
 
     rules = (
-        Rule(LinkExtractor(allow=r'Items/'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(allow=r'',restrict_xpaths=('//a[@class="reference internal"]')),
+            callback='parse_page',
+            follow=True),
     )
 
     def parse_page(self, response):
@@ -24,4 +26,7 @@ class FlaskSpider(CrawlSpider):
         """
         todo 补充url和text的解析规则
         """
+        item['url']=str(response.url).encode('utf-8')
+        item['text']=response.xpath('//div[@class="body"]/div[@class="section"]/div[@class="section"]/p/text()').extract()
+        print(item)
         yield item

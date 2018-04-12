@@ -11,7 +11,7 @@ class FlaskSpider(CrawlSpider):
     start_urls = ['http://flask.pocoo.org/docs/0.12/']
 
     rules = (
-        Rule(LinkExtractor(allow=r'',restrict_xpaths=('//a[@class="reference internal"]')),
+            Rule(LinkExtractor(allow='http://flask.pocoo.org/docs/0.12/.*'),
             callback='parse_page',
             follow=True),
     )
@@ -26,6 +26,15 @@ class FlaskSpider(CrawlSpider):
         """
         todo 补充url和text的解析规则
         """
-        item['url']=str(response.url).encode('utf-8')
-        item['text']=response.xpath('//div[@class="body"]/div[@class="section"]/div[@class="section"]/p/text()').extract_first()
+        item['url'] = response.url
+        item['text'] = ' '.join(response.xpath('//text()').extract())
+#        text_h1 = response.xpath('//div[@class="body"]/div[@class="section"]/h1/text()').extract()
+
+#       text_h1_p = response.xpath('//div[@class="body"]/div[@class="section"]/p/text()').extract()
+
+#        text_h2_p = response.xpath('//div[@class="body"]/div[@class="section"]/div[@class="section"]/p/text()').extract()
+#        text_h2 = response.xpath(' //div[@class="body"]/div[@class="section"]/div[@class="section"]/h2/text()').extract()
+        
+#        item['text'] = text_h1+text_h1_p+text_h2+text_h2_p
+        
         yield item

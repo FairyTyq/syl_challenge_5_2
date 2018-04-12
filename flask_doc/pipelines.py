@@ -13,10 +13,11 @@ class FlaskDocPipeline(object):
         """
         todo:将item结果以JSON形式保存到Redis数据库的list结构中
         """
-        self.open_spider(spider)
-        tmp_data = json.dumps({'url':str(item['url']),'text':item['text']})
-        self.redis.lpush("flask_doc",tmp_data)
-        print(tmp_data)
+        #self.open_spider(spider)
+        #tmp_data = json.dumps({'url':str(item['url']),'text':item['text']})
+        item['text'] = re.sub('\s+',' ',item['text'])
+        tmp_data = json.dumps(dict(item))
+        self.redis.lpush("flask_doc:items",tmp_data)
 
         return item
 

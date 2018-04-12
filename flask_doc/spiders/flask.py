@@ -27,6 +27,5 @@ class FlaskSpider(CrawlSpider):
         todo 补充url和text的解析规则
         """
         item['url']=str(response.url).encode('utf-8')
-        item['text']=response.xpath('//div[@class="body"]/div[@class="section"]/div[@class="section"]/p/text()').extract()
-        print(item)
+        item['text']=response.xpath('//div[@class="body"]/div[@class="section"]/div[@class="section"]/p/text()').extract_first()
         yield item
